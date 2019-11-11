@@ -23,8 +23,8 @@ public struct Point
 
 public class ConvexHull : MonoBehaviour {
 
-	public List<Point> hull;
-   public List<Point> vertices;
+    public List<Point> hull;
+    public List<Point> vertices;
 
     List<Point> high1;
     List<Point> high2;
@@ -40,13 +40,14 @@ public class ConvexHull : MonoBehaviour {
 
 
     ConvexHull() { }
-public ConvexHull(List<Point> v)  {
-        vertices = v;  hull = new List<Point>();
+    public ConvexHull(List<Point> v) {
+        vertices = v; hull = new List<Point>();
         high1 = new List<Point>();
-        high2= new List<Point>();
+        high2 = new List<Point>();
         high3 = new List<Point>();
         high4 = new List<Point>();
         high5 = new List<Point>();
+
         hull1 = new List<Point>();
         hull2 = new List<Point>();
         hull3 = new List<Point>();
@@ -80,7 +81,7 @@ public ConvexHull(List<Point> v)  {
                         vertices[j] = vertices[i];
                         vertices[i] = temp;
                     }
-                    else if(vertices[i].degreeXY == vertices[pivot].degreeXY)
+                    else if (vertices[i].degreeXY == vertices[pivot].degreeXY)
                     {
                         if (vertices[i]._v.x < vertices[pivot]._v.x)
                         {
@@ -125,26 +126,23 @@ public ConvexHull(List<Point> v)  {
         {
             for (int i = left + 1; i <= right; i++)
             {
-                if (high1[i].degreeXZ <= high1[pivot].degreeXZ)
+                if (high1[i].degreeXZ < high1[pivot].degreeXZ)
                 {
-                    if (high1[i].degreeXY < high1[pivot].degreeXY)
+                    j++;
+
+                    Point temp = high1[j];
+                    high1[j] = high1[i];
+                    high1[i] = temp;
+                }
+                else if (high1[i].degreeXZ == high1[pivot].degreeXZ)
+                {
+                    if (high1[i]._v.x < high1[pivot]._v.x)
                     {
                         j++;
 
-                        Point temp = high1[j];
+                        Point t = high1[j];
                         high1[j] = high1[i];
-                        high1[i] = temp;
-                    }
-                    else if (high1[i].degreeXY == high1[pivot].degreeXY)
-                    {
-                        if (high1[i]._v.x < high1[pivot]._v.x)
-                        {
-                            j++;
-
-                            Point t = high1[j];
-                            high1[j] = high1[i];
-                            high1[i] = t;
-                        }
+                        high1[i] = t;
                     }
                 }
             }
@@ -168,29 +166,27 @@ public ConvexHull(List<Point> v)  {
         {
             for (int i = left + 1; i <= right; i++)
             {
-                if (high2[i].degreeXZ <= high2[pivot].degreeXZ)
+                if (high2[i].degreeXZ < high2[pivot].degreeXZ)
                 {
-                    if (high2[i].degreeXY < high2[pivot].degreeXY)
+                    j++;
+
+                    Point temp = high2[j];
+                    high2[j] = high2[i];
+                    high2[i] = temp;
+                }
+                else if (high2[i].degreeXZ == high2[pivot].degreeXZ)
+                {
+                    if (high2[i]._v.x < high2[pivot]._v.x)
                     {
                         j++;
 
-                        Point temp = high2[j];
+                        Point t = high2[j];
                         high2[j] = high2[i];
-                        high2[i] = temp;
-                    }
-                    else if (high2[i].degreeXY == high2[pivot].degreeXY)
-                    {
-                        if (high2[i]._v.x < high2[pivot]._v.x)
-                        {
-                            j++;
-
-                            Point t = high2[j];
-                            high2[j] = high2[i];
-                            high2[i] = t;
-                        }
+                        high2[i] = t;
                     }
                 }
             }
+
             Point tem = high2[j];
             high2[j] = high2[left];
             high2[left] = tem;
@@ -202,6 +198,7 @@ public ConvexHull(List<Point> v)  {
             QuickSort2(pivot + 1, right);
         }
     }
+
     void QuickSort3(int left, int right)
     {
         int pivot = left;
@@ -211,26 +208,23 @@ public ConvexHull(List<Point> v)  {
         {
             for (int i = left + 1; i <= right; i++)
             {
-                if (high3[i].degreeXZ <= high3[pivot].degreeXZ)
+                if (high3[i].degreeXZ < high3[pivot].degreeXZ)
                 {
-                    if (high3[i].degreeXY < high3[pivot].degreeXY)
+                    j++;
+
+                    Point temp = high3[j];
+                    high3[j] = high3[i];
+                    high3[i] = temp;
+                }
+                else if (high3[i].degreeXZ == high3[pivot].degreeXZ)
+                {
+                    if (high3[i]._v.x < high3[pivot]._v.x)
                     {
                         j++;
 
-                        Point temp = high3[j];
+                        Point t = high3[j];
                         high3[j] = high3[i];
-                        high3[i] = temp;
-                    }
-                    else if (high3[i].degreeXY == high3[pivot].degreeXY)
-                    {
-                        if (high3[i]._v.x < high3[pivot]._v.x)
-                        {
-                            j++;
-
-                            Point t = high3[j];
-                            high3[j] = high3[i];
-                            high3[i] = t;
-                        }
+                        high3[i] = t;
                     }
                 }
             }
@@ -254,26 +248,23 @@ public ConvexHull(List<Point> v)  {
         {
             for (int i = left + 1; i <= right; i++)
             {
-                if (high4[i].degreeXZ <= high4[pivot].degreeXZ)
+                if (high4[i].degreeXZ < high4[pivot].degreeXZ)
                 {
-                    if (high4[i].degreeXY < high4[pivot].degreeXY)
+                    j++;
+
+                    Point temp = high4[j];
+                    high4[j] = high4[i];
+                    high4[i] = temp;
+                }
+                else if (high4[i].degreeXZ == high4[pivot].degreeXZ)
+                {
+                    if (high4[i]._v.x < high4[pivot]._v.x)
                     {
                         j++;
 
-                        Point temp = high4[j];
+                        Point t = high4[j];
                         high4[j] = high4[i];
-                        high4[i] = temp;
-                    }
-                    else if (high4[i].degreeXY == high4[pivot].degreeXY)
-                    {
-                        if (high4[i]._v.x < high4[pivot]._v.x)
-                        {
-                            j++;
-
-                            Point t = high4[j];
-                            high4[j] = high4[i];
-                            high4[i] = t;
-                        }
+                        high4[i] = t;
                     }
                 }
             }
@@ -540,24 +531,6 @@ public ConvexHull(List<Point> v)  {
             }
             hull1.Add(high1[k]);
 
-            //if (!isCCW(a[1], b[1], high2[k]))
-            //{
-            //    hull2.RemoveAt(num[1] - 1);
-
-            //    for (int i = 0; i <= num[1]; i++)
-            //    {
-            //        int index = num[1] - i;
-            //        if (!isCCW(hull2[index], hull2[index + 1], high2[k]))
-            //        {
-            //            int n = hull2.Count - 1;
-            //            if (n > -1)
-            //                hull2.RemoveAt(n);
-            //        }
-            //        else break;
-            //    }
-            //}
-            //hull2.Add(high2[k]);
-
             //if (!isCCW(a[2], b[2], high3[k]))
             //{
             //    hull3.RemoveAt(num[2] - 1);
@@ -638,9 +611,61 @@ public ConvexHull(List<Point> v)  {
                 }
             }
             hull2.Add(high2[k]);
-
         }
 
+        for (int k = 2; k < high3.Count; k++)
+        {
+            int num = hull3.Count;
+            Point b = hull3[num - 1];
+            Point a = hull3[num - 2];
+
+            // 새로운 점이 시계방향일때
+
+            if (!isCCW(a, b, high3[k]))
+            {
+                hull3.RemoveAt(num - 1);
+
+                for (int i = 3; i <= num; i++)
+                {
+                    int index = num - i;
+                    if (!isCCW(hull3[index], hull3[index + 1], high3[k]))
+                    {
+                        int n = hull3.Count - 1;
+                        if (n > -1)
+                            hull3.RemoveAt(n);
+                    }
+                    else break;
+                }
+            }
+            hull3.Add(high3[k]);
+        }
+
+        for (int k = 2; k < high4.Count; k++)
+        {
+            int num = hull4.Count;
+            Point b = hull4[num - 1];
+            Point a = hull4[num - 2];
+
+            // 새로운 점이 시계방향일때
+
+            if (!isCCW(a, b, high4[k]))
+            {
+                hull4.RemoveAt(num - 1);
+
+                for (int i = 3; i <= num; i++)
+                {
+                    int index = num - i;
+                    if (!isCCW(hull4[index], hull4[index + 1], high4[k]))
+                    {
+                        int n = hull4.Count - 1;
+                        if (n > -1)
+                            hull4.RemoveAt(n);
+                    }
+                    else break;
+                }
+            }
+            hull4.Add(high4[k]);
+        }
 
         //if (!isCCW(a, b, vertices[k]))
         //{

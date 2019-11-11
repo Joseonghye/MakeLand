@@ -119,49 +119,137 @@ public class FileManager : MonoBehaviour
         convex = new ConvexHull(floor);
         convex.SetConvexHull();
 
-        //int first = convex.hull[0]._index;
-        //for(int i=1; i< (convex.hull.Count -1);i++)
-        //{
-        //    triangles.Add(new Triangle(first, i, i+1));
-        //}
-     //   int triangleCount = convex.vertices.Count / 3;
-        //for (int i=0; i< convex.vertices.Count - 3; i++)
-        //{
-        ////    int num = i * 3;
-        //    triangles.Add(new Triangle(i,i+1,i+2));
-        //}
-        //int num = convex.vertices.Count - 2;
-        //triangles.Add(new Triangle(num, num- 1, 0));
-        //triangles.Add(new Triangle(num-1, 0,1 ));
+        int count1 = convex.hull1.Count;
+        int count2 = convex.hull2.Count;
 
-        for(int i=0; i<convex.hull1.Count; i++)
+        for (int i = 0; i < count1; i++)
         {
             int j = i + 1;
-            if (j < convex.hull2.Count)
+            if (j < count2)
             {
                 triangles.Add(new Triangle(convex.hull1[i]._index, convex.hull2[i]._index, convex.hull2[j]._index));
-                triangles.Add(new Triangle(convex.hull1[i]._index, convex.hull2[j]._index, convex.hull1[j]._index));
+                if(j< count1)
+                    triangles.Add(new Triangle(convex.hull1[i]._index, convex.hull2[j]._index, convex.hull1[j]._index));
+            }
+            else if(j < count1)
+            {
+                triangles.Add(new Triangle(convex.hull1[i]._index, convex.hull2[count2-1]._index, convex.hull1[j]._index));
+            }
+        }
+        triangles.Add(new Triangle(convex.hull1[count1-1]._index, convex.hull2[count2 - 1]._index, convex.hull2[0]._index));
+        triangles.Add(new Triangle(convex.hull2[count2 - 1]._index, convex.hull2[0]._index, convex.hull1[0]._index));
+
+        int cha = count2 - count1;
+        if (cha > 0)
+        {
+            for (int n = count1; n < count2; n++)
+            {
+                int j = n + 1;
+                if (j < count2)
+                {
+                    triangles.Add(new Triangle(convex.hull1[count1-1]._index, convex.hull2[n]._index, convex.hull2[j]._index));
+                }
+                else
+                    triangles.Add(new Triangle(convex.hull1[count1 - 1]._index, convex.hull2[n]._index, convex.hull2[n - 1]._index));
             }
         }
 
+        //-----------
+        int count3 = convex.hull3.Count;
 
+        for (int i = 0; i < count2; i++)
+        {
+            int j = i + 1;
+            if (j < count3)
+            {
+                triangles.Add(new Triangle(convex.hull2[i]._index, convex.hull3[i]._index, convex.hull3[j]._index));
+                if (j < count2)
+                    triangles.Add(new Triangle(convex.hull2[i]._index, convex.hull3[j]._index, convex.hull2[j]._index));
+            }
+            else if (j < count2)
+            {
+                triangles.Add(new Triangle(convex.hull2[i]._index, convex.hull3[count3 - 1]._index, convex.hull2[j]._index));
+            }
+        }
+        triangles.Add(new Triangle(convex.hull2[count2 - 1]._index, convex.hull3[count3- 1]._index, convex.hull3[0]._index));
+        triangles.Add(new Triangle(convex.hull3[count3 - 1]._index, convex.hull3[0]._index, convex.hull2[0]._index));
 
-        //SetDelaunayTriangle();
+         cha = count3 - count2;
+        if (cha > 0)
+        {
+            for (int n = count2; n < count3; n++)
+            {
+                int j = n + 1;
+                if (j < count3)
+                {
+                    triangles.Add(new Triangle(convex.hull2[count2 - 1]._index, convex.hull3[n]._index, convex.hull3[j]._index));
+                }
+                else
+                    triangles.Add(new Triangle(convex.hull2[count2 - 1]._index, convex.hull3[n]._index, convex.hull3[n - 1]._index));
+            }
+        }
 
-        //while(!con1||!con2)
-        //{
-        //    if (con1)
-        //    {
-        //        FindTriangle(p1[0], p1[1], prev1);
-        //    }
-        //    if (con2)
-        //    {
-        //        FindTriangle(p2[0], p2[1], prev2);
-        //    }
-        //}
+        //-----------
+        int count4 = convex.hull4.Count;
+
+        for (int i = 0; i < count3; i++)
+        {
+            int j = i + 1;
+            if (j < count4)
+            {
+                triangles.Add(new Triangle(convex.hull3[i]._index, convex.hull4[i]._index, convex.hull4[j]._index));
+                if (j < count3)
+                    triangles.Add(new Triangle(convex.hull3[i]._index, convex.hull4[j]._index, convex.hull3[j]._index));
+            }
+            else if (j < count3)
+            {
+                triangles.Add(new Triangle(convex.hull3[i]._index, convex.hull4[count4 - 1]._index, convex.hull3[j]._index));
+            }
+        }
+        triangles.Add(new Triangle(convex.hull3[count3 - 1]._index, convex.hull4[count4 - 1]._index, convex.hull4[0]._index));
+        triangles.Add(new Triangle(convex.hull4[count4 - 1]._index, convex.hull4[0]._index, convex.hull3[0]._index));
+
+        cha = count4 - count3;
+        if (cha > 0)
+        {
+            for (int n = count3; n < count4; n++)
+            {
+                int j = n + 1;
+                if (j < count4)
+                {
+                    triangles.Add(new Triangle(convex.hull3[count2 - 1]._index, convex.hull4[n]._index, convex.hull4[j]._index));
+                }
+                else
+                    triangles.Add(new Triangle(convex.hull3[count2 - 1]._index, convex.hull4[n]._index, convex.hull4[n - 1]._index));
+            }
+        }
+        //triangles.Add(new Triangle(convex.hull1[0]._index, convex.hull2[0]._index, convex.hull2[1]._index));
+        //triangles.Add(new Triangle(convex.hull1[0]._index, convex.hull1[1]._index, convex.hull2[1]._index));
+        //triangles.Add(new Triangle(convex.hull1[1]._index, convex.hull2[1]._index, convex.hull2[2]._index));
+        //triangles.Add(new Triangle(convex.hull1[1]._index, convex.hull2[2]._index, convex.hull1[2]._index));
+
         GetMesh();
     }
 
+    Vector3 GetIntersectPoint(Vector3 a1, Vector3 a2, Vector3 b)
+    {
+        Vector3 b2 = b;
+        b2.y = 0.0f;
+
+        float under = (b2.y - b.y) * (a2.x - a1.x) - (b2.x - b.x) * (a2.y - a1.y);
+        float _t = (b2.x - b.x) * (a1.y - b.y) - (b2.y - b.y) * (a1.x - b.x);
+
+        float underZ = (b2.y - b.y) * (a2.x - a1.x) - (b2.x - b.x) * (a2.y - a1.y);
+        float _s = (a2.x - a1.x) * (a1.z - b.z) - (a2.z - a1.z) * (a1.x - b.x);
+
+        float t = _t / under;
+        float s = _s / underZ;
+
+        float x = a1.x + t * (a2.x - a1 .x);
+        float y = a1.y + t * (a2.y - a1.y);
+        float z = a1.z + s * (a2.z - a1.z);
+        return new Vector3(x,y,z);
+    }
     void GetMesh()
     {
         MeshFilter mf = GetComponent<MeshFilter>();
