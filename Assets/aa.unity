@@ -310,7 +310,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e14d4518568ba1499d0d9bbd203b37d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blue: {fileID: 2100000, guid: 9ea438d618ee036429fc2fdcf72b0316, type: 2}
+  color:
+  - {fileID: 2100000, guid: 9ea438d618ee036429fc2fdcf72b0316, type: 2}
+  - {fileID: 2100000, guid: e46802d9e63ba184aa351c59089287ce, type: 2}
+  - {fileID: 2100000, guid: 49e9d2badeea8f540b74b24e6b2fb439, type: 2}
+  - {fileID: 2100000, guid: b090210e079e1474cac9c188d0660fcf, type: 2}
+  - {fileID: 2100000, guid: fbf359368c7f66c4eb34fc0ebc5da5c1, type: 2}
   dummy: {fileID: 1119028274802614, guid: 15b3b239ba5d4274ebb0e34b84766312, type: 2}
 --- !u!4 &832618467
 Transform:
@@ -338,7 +343,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: eafce77951c1193418ba032c79c4e4b3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

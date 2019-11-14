@@ -10,6 +10,7 @@ public struct Point
     public float degreeXY;
     public float degreeXZ;
 
+    public Point(Vector3 v) { _v = v; _index = -1; degreeXY = 0.0f; degreeXZ = 0.0f; }
     public Point(Vector3 v, int index){ _v = v; _index = index; degreeXY = 0.0f; degreeXZ = 0.0f; }
 
     bool isEqual(Vector3 vt)
