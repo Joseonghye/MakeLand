@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public struct Point
+public class Point
 {
     public Vector3 _v;
     public int _index;
     public float degreeXY;
     public float degreeXZ;
 
+    Point() { }
     public Point(Vector3 v) { _v = v; _index = -1; degreeXY = 0.0f; degreeXZ = 0.0f; }
     public Point(Vector3 v, int index){ _v = v; _index = index; degreeXY = 0.0f; degreeXZ = 0.0f; }
 
@@ -20,7 +21,7 @@ public struct Point
         else
             return false;
     }
-};
+}
 
 public class ConvexHull : MonoBehaviour {
 

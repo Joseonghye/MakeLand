@@ -82,7 +82,7 @@ public class FileManager : MonoBehaviour
     void GetVertices()
     {
         // csv 읽기
-        FileInfo source = new FileInfo(Application.dataPath + "/Resources/vertex2.csv");
+        FileInfo source = new FileInfo(Application.dataPath + "/Resources/vertex3.csv");
         TextReader reader = source.OpenText();
 
         string s = reader.ReadLine();
@@ -99,7 +99,8 @@ public class FileManager : MonoBehaviour
             }
 
             Vector3 v = new Vector3(f[0], f[2], f[1]);
-            vertices.Add(v);
+
+            float y = 0.0f;
 
             //점 위치 표시 
             GameObject ob = Instantiate(dummy, v, Quaternion.identity);
@@ -112,25 +113,30 @@ public class FileManager : MonoBehaviour
 
                 if (f[2] >= 95 && f[2] < 135)
                 {
+                    y = 95.0f;
                     contourLine[0].AddVertex(new Point(v, num));
                     ob.GetComponent<MeshRenderer>().material = color[1];
                 }
                 else if (f[2] >= 135 && f[2] < 175)
                 {
+                    y = 135.0f;
                     contourLine[1].AddVertex(new Point(v, num));
                     ob.GetComponent<MeshRenderer>().material = color[2];
                 }
                 else if (f[2] >= 175 && f[2] < 215)
                 {
+                    y = 175.0f;
                     contourLine[2].AddVertex(new Point(v, num));
                     ob.GetComponent<MeshRenderer>().material = color[3];
                 }
                 else if (f[2] >= 215 && f[2] < 256)
                 {
+                    y = 215.0f;
                     contourLine[3].AddVertex(new Point(v, num));
                     ob.GetComponent<MeshRenderer>().material = color[4];
                 }
             }
+            vertices.Add(new Vector3(f[0],y,f[1]));
 
             objs.Add(ob);
             num++;
@@ -141,10 +147,77 @@ public class FileManager : MonoBehaviour
         reader.Dispose();
         reader = null;
 
+        int count = 0;
+        //while(true)
+        //{
+
+        //}
+
+        for (int i = 0; i < 4; i++)
+        {
+            contourLine[i].GetConveHull();
+        }
+
+        float ox = (contourLine[1].convex[1]._v.x - contourLine[1].convex[0]._v.x) / 2;
+        float oz = (contourLine[1].convex[1]._v.z - contourLine[1].convex[0]._v.z) / 2;
+
+        Vector3 orignDown = new Vector3(ox, 0, oz);
+        List<Vector3> vs = new List<Vector3>();
+        float min = 1000;
+        int minIndex = -1;
+        for (int i = 0; i < contourLine[0].convex.Count; i++)
+        {
+            int oi = contourLine[0].convex[i]._index;
+            float oy = vertices[oi].y;
+
+            orignDown.y = oy;
+
+            Vector3 vA = contourLine[0].convex[i]._v;
+            vA.y = oy;
+
+            Vector3 vB;
+            if (i + 1 == contourLine[0].convex.Count)
+                vB = contourLine[0].convex[0]._v;
+            else
+                vB = contourLine[0].convex[i + 1]._v;
+
+            vB.y = oy;
+
+            float a = vB.z - vA.z;
+            float b = vB.x - vA.x;
+            float c = -(a * vA.x) + vA.z;
+
+            float k = (a * orignDown.x) + (b * orignDown.z) + c;
+            float under = (a * a) + (b * b);
+            k /= -under;
+
+            float x = a * k + orignDown.x;
+            float z = b * k + orignDown.z;
+
+            Vector3 n = new Vector3(x, orignDown.y, z);
+            vs.Add(n);
+
+            Debug.Log("vA = " + vA + "/ vB = " + vB + "/ n = " + n);
+
+            float dx = n.x - orignDown.x;
+            float dz = n.z - orignDown.z;
+            float d = Mathf.Sqrt((dx * dx) + (dz * dz));
+            if (min > d)
+            {
+                minIndex = vs.Count;
+                min = d;
+            }
+        }
+        vertices.Add(vs[minIndex]);
+
+        Debug.Log(vs[minIndex]);
+        triangles.Add(new Triangle(vertices.Count-1, contourLine[1].convex[0]._index, contourLine[1].convex[1]._index));
+
         //Convex hull 생성 
        // convex = new ConvexHull(floor);
         //convex.SetConvexHull();
         
+        /*
         for(int i=0; i<4; i++)
         {
             contourLine[i].GetConveHull();
@@ -153,39 +226,39 @@ public class FileManager : MonoBehaviour
         int count1 = contourLine[0].convex.Count;
         int count2 = contourLine[1].convex.Count;
 
-        //for (int i = 0; i < count1; i++)
-        //{
-        //    int j = i + 1;
-        //    if (j < count2)
-        //    {
-        //        triangles.Add(new Triangle(contourLine[0].convex[i]._index, contourLine[1].convex[i]._index, contourLine[1].convex[j]._index));
-        //        if(j< count1)
-        //            triangles.Add(new Triangle(contourLine[0].convex[i]._index, contourLine[1].convex[j]._index, contourLine[0].convex[j]._index));
-        //    }
-        //    else if(j < count1)
-        //    {
-        //        triangles.Add(new Triangle(contourLine[0].convex[i]._index, contourLine[1].convex[count2-1]._index, contourLine[0].convex[j]._index));
-        //    }
-        //}
-        //triangles.Add(new Triangle(contourLine[0].convex[count1-1]._index, contourLine[1].convex[count2 - 1]._index, contourLine[1].convex[0]._index));
-        //triangles.Add(new Triangle(contourLine[1].convex[count2 - 1]._index, contourLine[1].convex[0]._index, contourLine[0].convex[0]._index));
+        for (int i = 0; i < count1; i++)
+        {
+            int j = i + 1;
+            if (j < count2)
+            {
+                triangles.Add(new Triangle(contourLine[0].convex[i]._index, contourLine[1].convex[i]._index, contourLine[1].convex[j]._index));
+                if (j < count1)
+                    triangles.Add(new Triangle(contourLine[0].convex[i]._index, contourLine[1].convex[j]._index, contourLine[0].convex[j]._index));
+            }
+            else if (j < count1)
+            {
+                triangles.Add(new Triangle(contourLine[0].convex[i]._index, contourLine[1].convex[count2 - 1]._index, contourLine[0].convex[j]._index));
+            }
+        }
+        triangles.Add(new Triangle(contourLine[0].convex[count1 - 1]._index, contourLine[1].convex[count2 - 1]._index, contourLine[1].convex[0]._index));
+        triangles.Add(new Triangle(contourLine[1].convex[count2 - 1]._index, contourLine[1].convex[0]._index, contourLine[0].convex[0]._index));
 
-        //int cha = count2 - count1;
-        //if (cha > 0)
-        //{
-        //    for (int n = count1; n < count2; n++)
-        //    {
-        //        int j = n + 1;
-        //        if (j < count2)
-        //        {
-        //            triangles.Add(new Triangle(contourLine[0].convex[count1-1]._index, contourLine[1].convex[n]._index, contourLine[1].convex[j]._index));
-        //        }
-        //        else
-        //            triangles.Add(new Triangle(contourLine[0].convex[count1 - 1]._index, contourLine[1].convex[n]._index, contourLine[1].convex[n - 1]._index));
-        //    }
-        //}
+        int cha = count2 - count1;
+        if (cha > 0)
+        {
+            for (int n = count1; n < count2; n++)
+            {
+                int j = n + 1;
+                if (j < count2)
+                {
+                    triangles.Add(new Triangle(contourLine[0].convex[count1 - 1]._index, contourLine[1].convex[n]._index, contourLine[1].convex[j]._index));
+                }
+                else
+                    triangles.Add(new Triangle(contourLine[0].convex[count1 - 1]._index, contourLine[1].convex[n]._index, contourLine[1].convex[n - 1]._index));
+            }
+        }
 
-        //-----------
+    //    -----------
         int count3 = contourLine[2].convex.Count;
 
         for (int i = 0; i < count2; i++)
@@ -205,7 +278,7 @@ public class FileManager : MonoBehaviour
         triangles.Add(new Triangle(contourLine[1].convex[count2 - 1]._index, contourLine[2].convex[count3 - 1]._index, contourLine[2].convex[0]._index));
         triangles.Add(new Triangle(contourLine[2].convex[count3 - 1]._index, contourLine[2].convex[0]._index, contourLine[1].convex[0]._index));
 
-        int cha = count3 - count2;
+         cha = count3 - count2;
         if (cha > 0)
         {
             for (int n = count2; n < count3; n++)
@@ -220,44 +293,41 @@ public class FileManager : MonoBehaviour
             }
         }
 
-        ////-----------
-        //int count4 = contourLine[3].convex.Count;
+        //-----------
+        int count4 = contourLine[3].convex.Count;
 
-        //for (int i = 0; i < count3; i++)
-        //{
-        //    int j = i + 1;
-        //    if (j < count4)
-        //    {
-        //        triangles.Add(new Triangle(contourLine[2].convex[i]._index, contourLine[3].convex[i]._index, contourLine[3].convex[j]._index));
-        //        if (j < count3)
-        //            triangles.Add(new Triangle(contourLine[2].convex[i]._index, contourLine[3].convex[j]._index, contourLine[2].convex[j]._index));
-        //    }
-        //    else if (j < count3)
-        //    {
-        //        triangles.Add(new Triangle(contourLine[2].convex[i]._index, contourLine[3].convex[count4 - 1]._index, contourLine[2].convex[j]._index));
-        //    }
-        //}
-        //triangles.Add(new Triangle(contourLine[2].convex[count3 - 1]._index, contourLine[3].convex[count4 - 1]._index, contourLine[3].convex[0]._index));
-        //triangles.Add(new Triangle(contourLine[3].convex[count4 - 1]._index, contourLine[3].convex[0]._index, contourLine[2].convex[0]._index));
+        for (int i = 0; i < count3; i++)
+        {
+            int j = i + 1;
+            if (j < count4)
+            {
+                triangles.Add(new Triangle(contourLine[2].convex[i]._index, contourLine[3].convex[i]._index, contourLine[3].convex[j]._index));
+                if (j < count3)
+                    triangles.Add(new Triangle(contourLine[2].convex[i]._index, contourLine[3].convex[j]._index, contourLine[2].convex[j]._index));
+            }
+            else if (j < count3)
+            {
+                triangles.Add(new Triangle(contourLine[2].convex[i]._index, contourLine[3].convex[count4 - 1]._index, contourLine[2].convex[j]._index));
+            }
+        }
+        triangles.Add(new Triangle(contourLine[2].convex[count3 - 1]._index, contourLine[3].convex[count4 - 1]._index, contourLine[3].convex[0]._index));
+        triangles.Add(new Triangle(contourLine[3].convex[count4 - 1]._index, contourLine[3].convex[0]._index, contourLine[2].convex[0]._index));
 
-        //cha = count4 - count3;
-        //if (cha > 0)
-        //{
-        //    for (int n = count3; n < count4; n++)
-        //    {
-        //        int j = n + 1;
-        //        if (j < count4)
-        //        {
-        //            triangles.Add(new Triangle(contourLine[2].convex[count2 - 1]._index, contourLine[3].convex[n]._index, contourLine[3].convex[j]._index));
-        //        }
-        //        else
-        //            triangles.Add(new Triangle(contourLine[2].convex[count2 - 1]._index, contourLine[3].convex[n]._index, contourLine[3].convex[n - 1]._index));
-        //    }
-        //}
-        //triangles.Add(new Triangle(convex.hull1[0]._index, contourLine[1].convex[0]._index, contourLine[1].convex[1]._index));
-        //triangles.Add(new Triangle(convex.hull1[0]._index, convex.hull1[1]._index, contourLine[1].convex[1]._index));
-        //triangles.Add(new Triangle(convex.hull1[1]._index, contourLine[1].convex[1]._index, contourLine[1].convex[2]._index));
-        //triangles.Add(new Triangle(convex.hull1[1]._index, contourLine[1].convex[2]._index, convex.hull1[2]._index));
+        cha = count4 - count3;
+        if (cha > 0)
+        {
+            for (int n = count3; n < count4; n++)
+            {
+                int j = n + 1;
+                if (j < count4)
+                {
+                    triangles.Add(new Triangle(contourLine[2].convex[count2 - 1]._index, contourLine[3].convex[n]._index, contourLine[3].convex[j]._index));
+                }
+                else
+                    triangles.Add(new Triangle(contourLine[2].convex[count2 - 1]._index, contourLine[3].convex[n]._index, contourLine[3].convex[n - 1]._index));
+            }
+        }
+        */
 
         GetMesh();
     }
@@ -283,14 +353,42 @@ public class FileManager : MonoBehaviour
     }
     void GetMesh()
     {
+        LineRenderer line = GetComponent<LineRenderer>();
+        line.positionCount = contourLine[0].convex.Count;
+        for (int i = 0; i < contourLine[0].convex.Count; i++)
+        {
+            int index = contourLine[0].convex[i]._index;
+            line.SetPosition(i, vertices[index]);
+        }
+
+        int num = contourLine[0].convex.Count;
+        line.positionCount += contourLine[1].convex.Count;
+        for (int i = 0; i < contourLine[1].convex.Count; i++)
+        {
+            int index = contourLine[1].convex[i]._index;
+            line.SetPosition(num + i, vertices[index]);
+        }
+
+        //line.positionCount = triangles.Count * 3;
+        //for (int i = 0; i < triangles.Count; i++)
+        //{
+        //    int[] index = { triangles[i].v[0], triangles[i].v[1], triangles[i].v[2] };
+        //    int num = i * 3;
+
+        //    line.SetPosition(num, vertices[index[0]]);
+        //    line.SetPosition(num + 1, vertices[index[1]]);
+        //    line.SetPosition(num + 2, vertices[index[2]]);
+        //}
+
+
         MeshFilter mf = GetComponent<MeshFilter>();
         Mesh m = new Mesh();
 
-        List<Vector3> v = new List<Vector3>();
-        for(int i =0; i < floor.Count; i++)
-        {
-            v.Add(floor[i]._v);
-        }
+        //List<Vector3> v = new List<Vector3>();
+        //for(int i =0; i < floor.Count; i++)
+        //{
+        //    v.Add(floor[i]._v);
+        //}
 
         List<int> indices = new List<int>();
         for(int i=0; i< triangles.Count; i ++)
@@ -298,7 +396,7 @@ public class FileManager : MonoBehaviour
             indices.AddRange(triangles[i].v);
         }
 
-        m.vertices = vertices.ToArray(); //v.ToArray();
+        m.vertices = vertices.ToArray(); 
         m.triangles = indices.ToArray();
         mf.mesh = m;
     }

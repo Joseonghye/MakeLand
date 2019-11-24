@@ -7,6 +7,7 @@ public class ContourLine  {
 
     List<Point> vertices;
    public List<Point> convex;
+ //   float y;
 
 	public ContourLine()
     {
@@ -16,10 +17,15 @@ public class ContourLine  {
 
     public void AddVertex(Point InV)
     {
+   //     y += InV._v.y;
         vertices.Add(InV);
     }
 
-    public void GetConveHull() { SetConvexHull();  }
+    public void GetConveHull()
+    {
+      //  y /= vertices.Count;
+        SetConvexHull();
+    }
 
     void SetConvexHull()
     {
@@ -36,12 +42,16 @@ public class ContourLine  {
             }
         }
 
-        // 기준점과의 각도 구하기
-        Vector3 standard = vertices[minIndex]._v;
+        Point temp = vertices[minIndex];
+        vertices[minIndex] = vertices[0];
+        vertices[0] = temp;
 
-        for (int i=0; i<vertices.Count; i++)
+        // 기준점과의 각도 구하기
+        Vector3 standard = vertices[0]._v;
+
+        for (int i=1; i<vertices.Count; i++)
         {
-            if (i == minIndex) continue;
+    //        if (i == minIndex) continue;
 
             Vector3 v = vertices[i]._v;
             float x = v.x - standard.x;
@@ -106,10 +116,10 @@ public class ContourLine  {
             {
                 j++;
 
-                Swap(vertices[j], vertices[i]);
-                //Point temp = vertices[j];
-                //vertices[j] = vertices[i];
-                //vertices[i] = temp;
+                //    Swap(vertices[j], vertices[i]);
+                Point tmp = vertices[j];
+                vertices[j] = vertices[i];
+                vertices[i] = tmp;
             }
             else if (vertices[i].degreeXZ == vertices[pivot].degreeXZ)
             {
@@ -117,18 +127,18 @@ public class ContourLine  {
                 {
                     j++;
 
-                    Swap(vertices[j], vertices[i]);
-                    //Point t = high1[j];
-                    //high1[j] = high1[i];
-                    //high1[i] = t;
+                    //     Swap(vertices[j], vertices[i]);
+                    Point tmp = vertices[j];
+                    vertices[j] = vertices[i];
+                    vertices[i] = tmp;
                 }
             }
         }
 
-        Swap(vertices[j], vertices[left]);
-        //Point tem = high1[j];
-        //high1[j] = high1[left];
-        //high1[left] = tem;
+        //  Swap(vertices[j], vertices[left]);
+        Point temp = vertices[j];
+        vertices[j] = vertices[left];
+        vertices[left] = temp;
 
         pivot = j;
 
