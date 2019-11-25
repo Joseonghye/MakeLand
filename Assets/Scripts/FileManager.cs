@@ -161,10 +161,15 @@ public class FileManager : MonoBehaviour
         float ox = (contourLine[1].convex[1]._v.x - contourLine[1].convex[0]._v.x) / 2;
         float oz = (contourLine[1].convex[1]._v.z - contourLine[1].convex[0]._v.z) / 2;
 
-        Vector3 orignDown = new Vector3(ox, 0, oz);
+        Vector3 orignDown = contourLine[1].convex[0]._v + new Vector3(ox,0, oz);
+       // Debug.Log(orignDown);
+     //   GameObject o = Instantiate(dummy, orignDown, Quaternion.identity);
+
         List<Vector3> vs = new List<Vector3>();
         float min = 1000;
         int minIndex = -1;
+        int index = -1;
+
         for (int i = 0; i < contourLine[0].convex.Count; i++)
         {
             int oi = contourLine[0].convex[i]._index;
@@ -183,6 +188,26 @@ public class FileManager : MonoBehaviour
 
             vB.y = oy;
 
+            Vector3 AB = vB - vA;
+            Vector3 AP = orignDown - vA;
+
+            float sAB = (AB.x * AB.x) + (AB.y * AB.y) + (AB.z * AB.z);
+            sAB = Mathf.Sqrt(sAB);
+            float sAP = (AP.x * AP.x) + (AP.y * AP.y) + (AP.z * AP.z);
+            sAP = Mathf.Sqrt(sAP);
+
+            float dot = (AB.x * AP.x) + (AB.y * AP.y) + (AB.z * AP.z);
+            float under = sAB * sAP;
+            Vector3 dir = (AB * dot) / under;
+            Vector3 V = vA + dir;
+            vs.Add(V);
+
+          //  Debug.Log("vA = " + vA + "/ vB = " + vB + "/ Dir = " +dir + "/ V = " + V);
+
+            float dx = V.x - orignDown.x;
+            float dz = V.z - orignDown.z;
+
+            /*
             float a = vB.z - vA.z;
             float b = vB.x - vA.x;
             float c = -(a * vA.x) + vA.z;
@@ -201,17 +226,32 @@ public class FileManager : MonoBehaviour
 
             float dx = n.x - orignDown.x;
             float dz = n.z - orignDown.z;
+             */
+
             float d = Mathf.Sqrt((dx * dx) + (dz * dz));
             if (min > d)
             {
                 minIndex = vs.Count;
                 min = d;
+                index = i;
             }
         }
         vertices.Add(vs[minIndex]);
 
-        Debug.Log(vs[minIndex]);
+
+        for(int i=0; i<= index; i++)
+        {
+            if( i == index)
+            {
+                triangles.Add(new Triangle(contourLine[0].convex[i]._index, contourLine[1].convex[0]._index, vertices.Count - 1));
+            }
+            else
+                triangles.Add(new Triangle(contourLine[0].convex[i]._index, contourLine[1].convex[0]._index, contourLine[0].convex[i+1]._index));
+        }
+    //    Debug.Log(vs[minIndex]);
         triangles.Add(new Triangle(vertices.Count-1, contourLine[1].convex[0]._index, contourLine[1].convex[1]._index));
+
+      
 
         //Convex hull 생성 
        // convex = new ConvexHull(floor);
