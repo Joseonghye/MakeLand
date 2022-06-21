@@ -1,0 +1,23 @@
+﻿  d3dInit.cpp
+c:\users\joc home\desktop\voronoi_0604\voronoi\convexhull.h(103): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\convexhull.h(108): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\convexhull.h(112): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\convexhull.h(130): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(100): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(114): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(143): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(203): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(253): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(321): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(361): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(446): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(448): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(453): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(508): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(553): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(651): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(654): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(685): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(759): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\joc home\desktop\voronoi_0604\voronoi\d3dinit.cpp(611): warning C4101: 'c' :참조되지 않은 지역 변수입니다.
+  Voronoi.vcxproj -> C:\Users\JoC Home\Desktop\Voronoi_0604\Debug\Voronoi.exe
