@@ -235,8 +235,8 @@ void FindTriangle(const Point& A, const Point& B, int prevIndex)
 
 		t = _t / under;
 		s = _s / under;
-		if (t< -0.05f || t>1.0 || s< -0.05f || s>1.0) continue;
-		if (_t == 0 && _s == 0) continue;
+		if (t< -0.05f || t>1.0f || s< -0.05f || s>1.0f) continue;
+		if (_t == 0.f && _s == 0.f) continue;
 
 		Vertex center;
 		center._x = midAB._x + t * perpAB.x;
