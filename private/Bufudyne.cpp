@@ -38,7 +38,6 @@ HRESULT Client::Bufudyne::Ready(void * pArg)
 
 	UIInGame::PosData* posData = (UIInGame::PosData*)pArg;
 	m_pTransform->SetState(Transform::STATE_POSITION, XMLoadFloat4(&(posData->vPos)));
-//	m_pTransform->Scaling(XMVectorSet(4, 4, 0, 0));
 
 	return S_OK;
 }
@@ -79,7 +78,7 @@ _int Client::Bufudyne::LateUpdate(_double TimeDelta)
 
 HRESULT Client::Bufudyne::Render()
 {
-	GameInstance*		pGameInstance = GET_INSTANCE(GameInstance);
+	GameInstance*		pGameInstance = GameInstance::GetInstance(); // GET_INSTANCE(GameInstance);
 
 	m_pBuffer->SetUpValueOnShader("g_WorldMatrix", &XMMatrixTranspose(m_pTransform->GetWorldMatrix()), sizeof(_float) * 16);
 	m_pBuffer->SetUpValueOnShader("g_ViewMatrix", &XMMatrixTranspose(pGameInstance->GetTransform(PipeLine::D3DTS_VIEW)), sizeof(_matrix));
